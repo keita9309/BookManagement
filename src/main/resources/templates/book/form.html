@@ -1,0 +1,49 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="form">
+		<table>
+			<tr>
+				<td>書籍名</td>
+				<td><input type="text" name="name" th:value="*{name}">
+				    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>ISBNコード</td>
+				<td><input type="text" name="isbn" th:value="*{isbn}" maxlength="13">
+				    <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></span>
+				</td>
+			</tr>
+			<tr><td>内容</td><td><textarea cols="22" rows="5" name="description" th:text="*{description}"></textarea></td></tr>
+			<tr>
+				<td>出版社</td>
+				<td>
+					<input type="text" name="publisher" th:value="*{publisher}">
+					<span th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>価格</td>
+				<td>
+					<input type="number" name="price" th:value="*{price}">
+					<span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>出版年月日</td>
+				<td>
+					<!-- <input type="date" name="publication_date" th:value="${bookForm.publicationDateYmd()}"> -->
+					<input type="date" name="publication_date" th:value="${publication_date}">
+					<span th:if="${#fields.hasErrors('publication_date')}" th:errors="*{publication_date}"></span>
+				</td>
+			</tr>
+		</table>
+		<input type="hidden" name="id" th:value="*{id}" >
+		<span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
+		<input type="hidden" name="version" th:value="*{version}" >
+	</div>
+</body>
+</html>

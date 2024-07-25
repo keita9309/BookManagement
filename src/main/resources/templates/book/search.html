@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ 
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<div th:fragment="search">
+		<form th:action="@{/book/search}" method="get">
+			<table>
+				<tbody>
+					<tr>
+						<td>書籍名</td><td><input type="text" name="name"></td>
+						<td>ISBNコード</td><td><input type="text" name="isbn"></td>
+ 
+					</tr>
+					<tr>
+						<td>価格</td><td><input type="number" name="price_from">
+							～ <input type="number" name="price_to"></td>
+						<td>出版社</td><td><input type="text" name="publisher"></td>
+					</tr>
+					<tr>
+						<td>出版年月日</td><td><input type="date" name="publication_date_from">
+							～ <input type="date" name="publication_date_to"></td>
+					</tr>
+				</tbody>
+				<tfoot align="center">
+					<tr><td colspan="4"><button type="submit">検索</button></td></tr>
+				</tfoot>
+			</table>
+		</form>
+		<hr>
+	</div>
+</body>
+</html>

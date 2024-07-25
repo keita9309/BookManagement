@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header::head(~{::title})">
+	<title>書籍情報一覧</title>
+</head>
+<body>
+	<header th:insert="header::header"></header>
+	<div th:insert="book/search"></div>
+ 
+	<div th:text="${error}"></div>
+	<div th:if="${books}">
+		<div th:if="${books.size() == 0}">検索結果は0件です。</div>
+		<div th:if="${books.size() > 0}">
+			<table border="1">
+				<thead>
+					<tr><td>書籍名</td><td>ISBN</td><td>出版社</td><td>価格</td><td>出版年月日</td><td colspan="2"></td></tr>
+				</thead>
+				<tbody th:each="book : ${books}">
+					<tr><td th:text="${book.name}"></td><td th:text="${book.isbnFormat()}"></td><td th:text="${book.publisher}"></td>
+						<td th:text="${book.priceCommaOf1000()} + '円'" align="right"></td><td th:text="${book.publicationDateOfYyyymmdd()}"></td>
+						<td><a th:href="@{/book/edit/} + ${book.id}">編集</a></td>
+						<td>
+							<form th:action="@{/book/delete}" method="post">
+								<button class="delete-action" type="submit">削除</button>
+								<input type="hidden" th:value="${book.id}" name="id">
+								<input type="hidden" th:value="${book.version}" name="version">
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div style="margin:10px 10px;">
+				<form id="csvform" method="post" th:action="@{/download/csv}">
+					<input type="hidden" name="filename" />
+					<button type="submit">CSVダウンロード</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

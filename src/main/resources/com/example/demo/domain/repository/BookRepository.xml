@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.example.demo.domain.repository.BookRepository">
+  <resultMap type="com.example.demo.domain.model.Book" id="book">
+	<id column="id" property="id"></id>
+	<result column="name" property="name"></result>
+	<result column="isbn" property="isbn"></result>
+	<result column="description" property="description"></result>
+	<result column="publisher" property="publisher"></result>
+	<result column="price" property="price"></result>
+	<result column="publication_date" property="publication_date"></result>
+	<result column="created_user" property="created_user"></result>
+	<result column="created_at" property="created_at"></result>
+	<result column="updated_user" property="updated_user"></result>
+	<result column="updated_at" property="updated_at"></result>
+	<result column="deleted_user" property="deleted_user"></result>
+	<result column="deleted_at" property="deleted_at"></result>
+	<result column="version" property="version"></result>
+  </resultMap>
+ 
+  <insert id="save">
+	INSERT INTO book (name, isbn, description, publisher, price, publication_date,
+		created_user, created_at, updated_user, updated_at)
+	VALUES (#{name}, #{isbn}, #{description}, #{publisher}, #{price}, #{publication_date},
+        #{created_user}, #{created_at}, #{updated_user}, #{updated_at})
+  </insert>
+ 
+  <select id="existsIsbn" resultMap="book">
+  	SELECT * FROM book WHERE isbn = #{isbn} AND deleted_at IS NULL
+  </select>
+  
+  <select id="selectMany" resultMap="book">
+	SELECT
+	id,
+	name,
+	isbn,
+	description,
+	publisher,
+	price,
+	publication_date,
+	created_user,
+	created_at,
+	updated_user,
+	updated_at
+	FROM book
+	WHERE
+	deleted_at IS NULL
+	<if test="name != '' and name != null">
+		<bind name="name_pattern" value="'%' + name + '%'" />
+		AND name LIKE #{name_pattern}
+	</if>
+   	<if test="isbn != '' and isbn != null">
+   		<bind name="isbn_pattern" value="isbn + '%'" />
+    	AND isbn LIKE #{isbn_pattern}
+ 	</if>
+   	<if test="publisher != '' and publisher != null">
+   		<bind name="publisher_pattern" value="'%' + publisher + '%'" />
+			AND publisher LIKE #{publisher_pattern}
+ 	</if>
+ 	<choose>
+    	<when test="price_from != '' and price_from != null and price_to != '' and price_to != null">
+      		AND price BETWEEN #{price_from} and #{price_to}
+    	</when>
+    	<when test="price_from != '' and price_from != null">
+      		AND price <![CDATA[ >= ]]> #{price_from}
+    	</when>
+    	<when test="price_to != '' and price_to != null">
+      		AND price <![CDATA[ <= ]]> #{price_to}
+    	</when>
+  	</choose>
+  	<choose>
+    	<when test="publication_date_from != '' and publication_date_from != null and publication_date_to != '' and publication_date_to != null">
+      		AND publication_date BETWEEN #{publication_date_from} and #{publication_date_to}
+    	</when>
+    	<when test="publication_date_from != '' and publication_date_from != null">
+      		AND publication_date <![CDATA[ >= ]]> #{publication_date_from}
+    	</when>
+    	<when test="publication_date_to != '' and publication_date_to != null">
+      		AND publication_date <![CDATA[ <= ]]> #{publication_date_to}
+    	</when>
+  	</choose>
+  </select>
+ 
+</mapper>
